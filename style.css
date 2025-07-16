@@ -1,0 +1,19 @@
+.game-card {
+    height: 100vh;
+    font-family: 'Open Sans', monospace;
+}
+
+.col-md-4 {
+    max-width: 100%;
+}
+
+.btn-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#btnEqual {
+    line-height: 2.75rem;
+}

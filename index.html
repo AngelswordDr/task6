@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Угадайка</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" type="text/css"/>
+</head>
+<body>
+<div class="container">
+    <div class="row game-card align-items-center">
+        <div class="col col-md-4 offset-md-4">
+            <div class="card text-center">
+                <div class="card-header">
+                    <p class="m-0" id="cardHeader">Вопрос №<span id="orderNumberField">5</span></p>
+                </div>
+                <div class="card-body">
+                    <div class="row no-gutters">
+                        <div class="col">
+                            <h3 class="card-title m-0"><span id="answerField">Вы загадали число 5?</span></h3>
+                            <input class="form-control input-window" id="inputWindow" value="">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group">
+                        <button class="btn btn-dark" id="btnOk">Ok</button>
+                        <button class="btn btn-info collapse" id="btnLess">&#129047;<br>Меньше</button>
+                        <button class="btn btn-success collapse btn-lg" id="btnEqual">Верно!</button>
+                        <button class="btn btn-info collapse" id="btnOver">Больше<br>&#129045;</button>
+                        <button class="btn btn-warning" id="btnRandom">Рандом</button>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-danger collapse" id="btnRetry">Заново</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
