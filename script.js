@@ -12,12 +12,12 @@ gameStart();
 document.getElementById('btnOk').addEventListener('click', function () {
     steps++;
     if (steps === 1 ) {
-        minValue = parseInt(inputWindow.value);
+        minValue = safeParse(inputWindow.value, 0);
         answerField.innerText = 'Введите максимальное значение числа для игры';
         inputWindow.value = '100';
     }
     if (steps === 2) {
-        maxValue = parseInt(inputWindow.value);
+        maxValue = safeParse(inputWindow.value, 100);
         answerField.innerText = `Загадайте любое целое число от ${minValue} до ${maxValue}, а я его угадаю`;
         inputWindow.classList.add('collapse');
         document.getElementById('btnRandom').classList.add('collapse');
@@ -42,11 +42,9 @@ document.getElementById('btnRandom').addEventListener('click', function () {
         minValue = Math.round( Math.random() * 999);
         answerField.innerText = 'Введите максимальное значение числа для игры';
         inputWindow.value = '100';
-        console.log(minValue);
     }
     if (steps === 2) {
         maxValue = Math.round( Math.random() * 999);
-        console.log(maxValue);
         do {
             minValue = Math.round( Math.random() * 999);
             minValue = Math.round( Math.random() * 999);
@@ -174,4 +172,9 @@ function gameStart() {
     cardHeader.innerText = 'Начало игры';
     answerField.innerText = 'Введите минимальное значение числа для игры';
     inputWindow.value = '0';
+}
+
+function safeParse(input, defaultValue) {
+    const num = parseInt(input);
+    return isNaN(num) ? defaultValue : num > 999 ? 999 : num < -999 ? -999 : num;
 }
