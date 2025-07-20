@@ -3,6 +3,10 @@ const orderNumberField = document.getElementById('orderNumberField');
 const answerField = document.getElementById('answerField');
 const cardHeader = document.getElementById('cardHeader');
 let answerNumber;
+let victory = false;
+let retry = 0;
+let incorrectGame = false;
+let randStep = false;
 let orderNumber = 1;
 let gameRun = true;
 let steps = 0;
@@ -18,13 +22,28 @@ document.getElementById('btnOk').addEventListener('click', function () {
     }
     if (steps === 2) {
         maxValue = safeParse(inputWindow.value, 100);
-        answerField.innerText = `Загадайте любое целое число от ${minValue} до ${maxValue}, а я его угадаю`;
-        inputWindow.classList.add('collapse');
-        document.getElementById('btnRandom').classList.add('collapse');
-        document.getElementById('btnOk').innerText = 'Загадал!';
+        if (randStep === true && minValue > maxValue) {
+            while (!(minValue < maxValue)) {
+                minValue = Math.round( Math.random() * 999);
+            }
+        }
+        if (minValue > maxValue) {
+            const phraseRandom = Math.round( Math.random() * 3);
+            answerField.innerText = randomIncorrectNumb(phraseRandom);
+            inputWindow.classList.add('collapse');
+            document.getElementById('btnRandom').classList.add('collapse');
+            document.getElementById('btnOk').classList.add('collapse');
+            document.getElementById('btnRetry').classList.remove('collapse');
+            incorrectGame = true;
+            gameRun = false;
+        } else {
+            answerField.innerText = `Загадайте любое целое число от ${minValue} до ${maxValue}, а я его угадаю`;
+            inputWindow.classList.add('collapse');
+            document.getElementById('btnRandom').classList.add('collapse');
+            document.getElementById('btnOk').innerText = 'Загадал!';
+        }
     }
     if (steps === 3) {
-        steps = 0;
         document.getElementById('btnLess').classList.remove('collapse');
         document.getElementById('btnOver').classList.remove('collapse');
         document.getElementById('btnEqual').classList.remove('collapse');
@@ -42,7 +61,7 @@ document.getElementById('btnRandom').addEventListener('click', function () {
         minValue = Math.round( Math.random() * 999);
         answerField.innerText = 'Введите максимальное значение числа для игры';
         inputWindow.value = '100';
-        randStep++;
+        randStep = true;
     }
     if (steps === 2) {
         maxValue = Math.round( Math.random() * 999);
@@ -55,7 +74,6 @@ document.getElementById('btnRandom').addEventListener('click', function () {
         document.getElementById('btnOk').innerText = 'Загадал!';
     }
     if (steps === 3) {
-        steps = 0;
         document.getElementById('btnLess').classList.remove('collapse');
         document.getElementById('btnOver').classList.remove('collapse');
         document.getElementById('btnEqual').classList.remove('collapse');
@@ -68,9 +86,21 @@ document.getElementById('btnRandom').addEventListener('click', function () {
 })
 
 document.getElementById('btnRetry').addEventListener('click', function () {
+    if (incorrectGame) {
+        inputWindow.classList.remove('collapse');
+        document.getElementById('btnRandom').classList.remove('collapse');
+        document.getElementById('btnOk').classList.remove('collapse');
+        document.getElementById('btnRetry').classList.add('collapse');
+    }
+    retry = 1;
     gameStart();
     orderNumber = 1;
+    steps = 0;
     gameRun = true;
+    incorrectGame = false;
+    randStep = false;
+    victory = false;
+    retry = 0;
 })
 
 document.getElementById('btnOver').addEventListener('click', function () {
@@ -117,6 +147,10 @@ document.getElementById('btnEqual').addEventListener('click', function () {
     if (gameRun){
         const phraseRandom = Math.round( Math.random() * 3);
         answerField.innerText = randomPhraseOver(phraseRandom);
+        document.getElementById('btnLess').classList.add('collapse');
+        document.getElementById('btnOver').classList.add('collapse');
+        document.getElementById('btnEqual').classList.add('collapse');
+        victory = true;
         gameRun = false;
     }
 })
@@ -157,18 +191,54 @@ function randomPhraseOver (phraseRandom) {
     return phrase;
 }
 
+function randomIncorrectNumb (phraseRandom) {
+    switch (phraseRandom) {
+        case 0:
+            phrase = `Вы ввели некорректные данные`;
+            break;
+        case 1:
+            phrase = `Как так-то, минимум не может быть больше максимума\n\u{1F62D}`;
+            break;
+        case 2:
+            phrase = `Неправильно, попробуй еще раз\n\u{1F60A}`;
+            break;
+        case 3:
+            phrase = `Не забывай, первое число должно быть меньше второго, хорошо?\n\u{1F64F}`;
+            break;
+    }
+    return phrase;
+}
+
 function gameStart() {
-    inputWindow.classList.remove('collapse');
-    document.getElementById('btnLess').classList.add('collapse');
-    document.getElementById('btnOver').classList.add('collapse');
-    document.getElementById('btnEqual').classList.add('collapse');
-    document.getElementById('btnRetry').classList.add('collapse');
-    document.getElementById('btnRandom').classList.remove('collapse');
-    document.getElementById('btnOk').classList.remove('collapse');
-    document.getElementById('btnOk').innerText = 'Ок';
-    cardHeader.innerText = 'Начало игры';
-    answerField.innerText = 'Введите минимальное значение числа для игры';
-    inputWindow.value = '0';
+    console.log(victory);
+    console.log(retry);
+    if (victory === true && retry === 1) {
+        inputWindow.classList.remove('collapse');
+        document.getElementById('btnRetry').classList.add('collapse');
+        document.getElementById('btnRandom').classList.remove('collapse');
+        document.getElementById('btnOk').classList.remove('collapse');
+        document.getElementById('btnOk').innerText = 'Ок';
+        cardHeader.innerText = 'Начало игры';
+        answerField.innerText = 'Введите минимальное значение числа для игры';
+        inputWindow.value = '0';
+    }
+    if (victory === false && retry === 1) {
+        document.getElementById('btnLess').classList.add('collapse');
+        document.getElementById('btnOver').classList.add('collapse');
+        document.getElementById('btnEqual').classList.add('collapse');
+        inputWindow.classList.remove('collapse');
+        document.getElementById('btnRetry').classList.add('collapse');
+        document.getElementById('btnRandom').classList.remove('collapse');
+        document.getElementById('btnOk').classList.remove('collapse');
+        document.getElementById('btnOk').innerText = 'Ок';
+        cardHeader.innerText = 'Начало игры';
+        answerField.innerText = 'Введите минимальное значение числа для игры';
+        inputWindow.value = '0';
+    } else {
+        cardHeader.innerText = 'Начало игры';
+        answerField.innerText = 'Введите минимальное значение числа для игры';
+        inputWindow.value = '0';
+    }
 }
 
 function safeParse(input, defaultValue) {
