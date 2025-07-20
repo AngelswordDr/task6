@@ -42,20 +42,17 @@ document.getElementById('btnRandom').addEventListener('click', function () {
         minValue = Math.round( Math.random() * 999);
         answerField.innerText = 'Введите максимальное значение числа для игры';
         inputWindow.value = '100';
+        randStep++;
     }
     if (steps === 2) {
         maxValue = Math.round( Math.random() * 999);
-        do {
-            minValue = Math.round( Math.random() * 999);
-            minValue = Math.round( Math.random() * 999);
-            console.log(minValue);
-            console.log(maxValue);
-        } while (!(minValue < maxValue)) {
-            answerField.innerText = `Загадайте любое целое число от ${minValue} до ${maxValue}, а я его угадаю`;
-            inputWindow.classList.add('collapse');
-            document.getElementById('btnRandom').classList.add('collapse');
-            document.getElementById('btnOk').innerText = 'Загадал!';
+        while (!(minValue < maxValue)) {
+            maxValue = Math.round( Math.random() * 999);
         }
+        answerField.innerText = `Загадайте любое целое число от ${minValue} до ${maxValue}, а я его угадаю`;
+        inputWindow.classList.add('collapse');
+        document.getElementById('btnRandom').classList.add('collapse');
+        document.getElementById('btnOk').innerText = 'Загадал!';
     }
     if (steps === 3) {
         steps = 0;
